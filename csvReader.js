@@ -13,7 +13,6 @@ let getNames = function() {
                 });
             });
     }
-
     return _names;
 }
 

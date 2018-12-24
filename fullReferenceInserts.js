@@ -1,5 +1,6 @@
 const ObjectID = require('mongodb').ObjectID;
 const csvReader = require('./csvReader');
+const randomRecordsHelper = require('./randomRecordsHelper');
 
 let insertDepartments = async function (db) {
     try {
@@ -18,25 +19,20 @@ let insertDepartments = async function (db) {
 let insertEmployees = async function (db) {
     try {
         console.log("CALL: insertEmployees");
-
         let names = await csvReader.getNames();
         let addresses = await csvReader.getAddresses();
-        let depIds =  await db.collection('Departments').distinct('_id').then(function (result) {
+        let departmentIds = await db.collection('Departments').distinct('_id').then(function (result) {
             return result;
         });
 
         let employees = [];
         for (let i = 0; i < 10; i++) {
-            let namesRand = Math.floor(Math.random() * names.length);
-            let addressesRand = Math.floor(Math.random() * addresses.length);
-            let depIdRand = Math.floor(Math.random() * depIds.length);
-
-            let x = {
-                FullName: names[namesRand] + ' ' + names[namesRand + i],
-                Address: addresses[addressesRand],
-                DepartmentId: new ObjectID(depIds[depIdRand].toString())
+            let employee = {
+                FullName: randomRecordsHelper.getFullName(names),
+                Address: randomRecordsHelper.getAddress(addresses),
+                DepartmentId: randomRecordsHelper.getDepartmentId(departmentIds)
             };
-            employees.push(x);
+            employees.push(employee);
         }
 
         await db.collection('Employees').insertMany(employees);
@@ -51,22 +47,24 @@ let insertChildren = async function (db) {
         console.log("CALL: insertChildren");
 
         let names = await csvReader.getNames();
-        let employeeIds = await  db.collection('Employees').distinct('_id').then(function (result) {
-            return result;
-        });
-
+        let employees = await db.collection('Employees').find().toArray();
         let children = [];
-        for (let i = 0; i < 10; i++) {
-            let namesRand = Math.floor(Math.random() * names.length);
-            let namesRand2 = Math.floor(Math.random() * namesRand);
-            let empId = Math.floor(Math.random() * employeeIds.length);
+       
+        for (let employee of employees) {
+            let randomChildren = randomRecordsHelper.getChildren(names, employee.FullName.split(' ')[1]);
 
-            let x = {
-                FullName: names[namesRand] + ' ' + names[namesRand2],
-                EmployeeId: new ObjectID(employeeIds[empId].toString())
-            };
-            children.push(x);
+            var employeesChildren = randomChildren.map(child => {
+                return {
+                _id : child._id,
+                FullName : child.FullName,
+                EmployeeId : employee._id
+                }
+            })
+
+            // use syntax with ... in order to push an array, not just a single item (ES6)
+            children.push(...employeesChildren);
         }
+
         await db.collection('Children').insertMany(children);
     }
     catch (e) {
@@ -82,19 +80,10 @@ let insertProjects = async function (db) {
             return result;
         });
 
-        let projects = [];
-        for (let i = 0; i < 10; i++) {
-            let randomDeptId = Math.floor(Math.random() * departmentIds.length);
-            let project = {
-                Name: 'Project' + i,
-                Description: 'Description' + i,
-                Duration: Math.floor(Math.random() * (10 - 4 + 1) + 4),
-    
-                DepartmentId: new ObjectID(departmentIds[randomDeptId].toString())
-            }
-            projects.push(project);
-    
-        }
+        let projects = randomRecordsHelper.generateProjects(20).map((project) => {
+            project.DepartmentId = randomRecordsHelper.getDepartmentId(departmentIds);
+            return project;
+        })
         await db.collection('Projects').insertMany(projects);
     }
     catch (e) {
