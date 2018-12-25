@@ -48,17 +48,20 @@ let getProjects = function(projects, numberOfRecords) {
         return projects[randomIndex]
     });
     
-    let result = [];
+    let uniqueProjects = [];
     let map = new Map();
 
     for(let project of randomProjects) {
         if(!map.has(project._id)){
             map.set(project._id, true);
-            result.push({_id: project._id, Name: project.Name});
+            uniqueProjects.push({_id: project._id, 
+                Name: project.Name, 
+                Description: project.Description, 
+                Duration: project.Duration});
         }
     }
 
-    return result;
+    return uniqueProjects;
 }
 
 //todo: Get project name and description from external source
@@ -94,6 +97,7 @@ let generateRandomChildrenNumber = function() {
 let generateRandomProjectsNumber = function() {
     //employee can be assigned to maximum 3 projects
     return Math.floor(Math.random() * 4); // number of projects an employee is assigned to
+   
 }
 
 //-------
@@ -105,5 +109,6 @@ module.exports = {
     generateProjects,
     getFullName,
     getAddress,
-    getDepartmentId
+    getDepartmentId,
+    generateRandomProjectsNumber
 }

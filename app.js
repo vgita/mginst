@@ -1,6 +1,7 @@
 const db = require('./db');
 const fullRefereceInserts = require('./fullReferenceInserts');
 const refAndNesteInserts = require('./refAndNestedInserts');
+const fullNestedInserts = require('./fullNestedInserts');
 
 const fullRefferenceDbName = 'FullRefDb';
 const refAndNestedDbName = 'RefAndNestedDb';
@@ -56,7 +57,8 @@ function createDb (dbName) {
 
         if(theDb.databaseName === fullNestedDbName)
         {
-         // console.log(fullNestedDbName+' not implementd')
+          await theDb.collection('Employees').deleteMany({});
+          await fullNestedInserts.insertEmployees(theDb);
         }
         //----------------//-----------------------//
       }
