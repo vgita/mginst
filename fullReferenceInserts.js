@@ -96,25 +96,46 @@ let insertWorksOn = async function (db) {
         console.log("CALL: insertWorksOn");
 
         let employeeIds = await db.collection('Employees').distinct('_id').then(function (result) {
-            return result;
+            //do not use all employees
+            //there should be employees that are not assigned to projects and projects
+            //that are not started
+            return result.slice(Math.floor(result.length - result.length * 0.98));
         });
         let projectIds = await db.collection('Projects').distinct('_id').then(function (result) {
             return result;
         });
 
         let worksOnRecords = [];
-        for (let i = 0; i < employeeIds.length; i++) {
-            var randomProjectId = Math.floor(Math.random() * projectIds.length);
-            let record = {
-                _id: {
-                    EmployeeId: new ObjectID(employeeIds[i].toString()),
-                    ProjectId: new ObjectID(projectIds[randomProjectId].toString())
-                },
-                WorkingHours: Math.floor(Math.random() * (8 - 3 + 1) + 3)
+        for (let i = 0; i < projectIds.length; i++) {
+            // 8-0 persons can work at a project
+            let randomWorkersNumber =  Math.floor(Math.random() * 9)
+
+            let projectWorkers = [];
+
+            for(let j = 0; j < randomWorkersNumber; j++) {
+                let randomEmployeeId = Math.abs(Math.floor(Math.random() * employeeIds.length));
+                let record = {
+                    _id: {
+                        EmployeeId: new ObjectID(employeeIds[randomEmployeeId].toString()),
+                        ProjectId: new ObjectID(projectIds[i].toString())
+                    },
+                    WorkingHours: Math.floor(Math.random() * (8 - 3 + 1) + 3)
+                }
+                
+                //avoid inserting duplicates
+                let alreadyInsertd = await projectWorkers.some(elm => {
+                    return elm._id.EmployeeId.toString() == record._id.EmployeeId.toString();
+                })
+
+                if(!alreadyInsertd)
+                {
+                    projectWorkers.push(record); 
+                }
             }
-            worksOnRecords.push(record);
+            worksOnRecords.push(...projectWorkers);
+           
         }
-        await db.collection('WorksOn').insertMany(worksOnRecords);
+        await db.collection('WorksOn').insertMany(worksOnRecords, { continueOnError: true, safe: true });
       
         console.log("DONE");
     }

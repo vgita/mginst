@@ -3,9 +3,9 @@ const fullRefereceInserts = require('./fullReferenceInserts');
 const refAndNesteInserts = require('./refAndNestedInserts');
 const fullNestedInserts = require('./fullNestedInserts');
 
-const fullRefferenceDbName = 'FullRefDb';
-const refAndNestedDbName = 'RefAndNestedDb';
-const fullNestedDbName = 'FullNestedDb';
+const fullRefferenceDbName = 'VgitaDis2019FullRefDb';
+const refAndNestedDbName = 'VgitaDis2019RefAndNestedDb';
+const fullNestedDbName = 'VgitaDis2019FullNestedDb';
 
 let dbNames = [fullRefferenceDbName,refAndNestedDbName,fullNestedDbName ];
 
