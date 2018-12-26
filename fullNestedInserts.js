@@ -3,14 +3,14 @@ const ObjectID = require('mongodb').ObjectID;
 const recordsHelper = require('./randomRecordsHelper');
 
 
-let insertEmployees = async function (db) {
+let insertEmployees = async function (db, numberOfRecords) {
     try {
         console.log('FULL NESTED===>insertEmployees');
         let deptNames = await csvReader.getDepartmentNames();
         let names = await csvReader.getNames();
         let addresses = await csvReader.getAddresses();
 
-        let randomProjects = recordsHelper.generateProjects(20);
+        let randomProjects = recordsHelper.generateProjects(1000);
 
         //look at ref and nested inserts example
         let departments = deptNames.map((departmentName) => ({
@@ -20,7 +20,7 @@ let insertEmployees = async function (db) {
 
         let employees = [];
 
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < numberOfRecords; i++) {
             let employeeFullName = recordsHelper.getFullName(names);
             let employeeAddress = recordsHelper.getAddress(addresses);
 

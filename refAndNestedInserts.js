@@ -1,18 +1,20 @@
 const csvReader = require('./csvReader');
 const recordsHelper = require('./randomRecordsHelper');
 
-let insertDepartments = async function(db) {
+let insertDepartments = async function(db, maxNumberOfProjectsPerDepartment) {
     try {
         console.log('===>insertDepartments');
+
         let deptNames = await csvReader.getDepartmentNames();
         let departments = [];
 
-        let randomGeneratedProjects = recordsHelper.generateProjects(10);
+        let randomGeneratedProjects = recordsHelper.generateProjects(maxNumberOfProjectsPerDepartment);
 
         for (let i = 0; i < deptNames.length; i++) {
             let department = { Name: deptNames[i]};
 
-            var randomProjectsNumber = Math.floor(Math.random() * 6)
+            let randomProjectsNumber = Math.floor(Math.random() * maxNumberOfProjectsPerDepartment)
+           console.log(randomProjectsNumber);
             department.Projects = recordsHelper.getProjects(randomGeneratedProjects, randomProjectsNumber);
             departments.push(department)
         }
@@ -23,7 +25,7 @@ let insertDepartments = async function(db) {
     }
 }
 
-let insertEmployees = async function(db) {
+let insertEmployees = async function(db, numberOfRecords) {
     try {
         console.log('===>insertEmployees');
         let departmentIds = await db.collection('Departments').distinct('_id').then(function (result) {
@@ -39,7 +41,7 @@ let insertEmployees = async function(db) {
 
         let employees = [];
         //Insert x employees
-        for(let i=0; i < 10; i++) {
+        for(let i=0; i < numberOfRecords; i++) {
 
             let fullName = recordsHelper.getFullName(names);
 

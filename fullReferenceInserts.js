@@ -16,7 +16,7 @@ let insertDepartments = async function (db) {
     }
 }
   
-let insertEmployees = async function (db) {
+let insertEmployees = async function (db, numberOfRecords) {
     try {
         console.log("CALL: insertEmployees");
         let names = await csvReader.getNames();
@@ -26,7 +26,7 @@ let insertEmployees = async function (db) {
         });
 
         let employees = [];
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < numberOfRecords; i++) {
             let employee = {
                 FullName: randomRecordsHelper.getFullName(names),
                 Address: randomRecordsHelper.getAddress(addresses),
@@ -72,7 +72,7 @@ let insertChildren = async function (db) {
     }
 }
   
-let insertProjects = async function (db) {
+let insertProjects = async function (db, numberOfRecords) {
     try {
         console.log("CALL: insertProjects");
 
@@ -80,7 +80,7 @@ let insertProjects = async function (db) {
             return result;
         });
 
-        let projects = randomRecordsHelper.generateProjects(20).map((project) => {
+        let projects = randomRecordsHelper.generateProjects(numberOfRecords).map((project) => {
             project.DepartmentId = randomRecordsHelper.getDepartmentId(departmentIds);
             return project;
         })

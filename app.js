@@ -34,13 +34,13 @@ function createDb (dbName) {
           await fullRefereceInserts.insertDepartments(theDb);
   
           await theDb.collection('Employees').deleteMany({});
-          await fullRefereceInserts.insertEmployees(theDb);
+          await fullRefereceInserts.insertEmployees(theDb, 20000);
   
           await theDb.collection('Children').deleteMany({});
           await fullRefereceInserts.insertChildren(theDb);
   
           await theDb.collection('Projects').deleteMany({});
-          await fullRefereceInserts.insertProjects(theDb);
+          await fullRefereceInserts.insertProjects(theDb, 1000);
   
           await theDb.collection('WorksOn').deleteMany({});
           await fullRefereceInserts.insertWorksOn(theDb);
@@ -49,16 +49,16 @@ function createDb (dbName) {
         if(theDb.databaseName === refAndNestedDbName)
         {
           await theDb.collection('Departments').deleteMany({});
-          await refAndNesteInserts.insertDepartments(theDb);
+          await refAndNesteInserts.insertDepartments(theDb, 1000);
 
           await theDb.collection('Employees').deleteMany({});
-          await refAndNesteInserts.insertEmployees(theDb);
+          await refAndNesteInserts.insertEmployees(theDb, 20000);
         }
 
         if(theDb.databaseName === fullNestedDbName)
         {
           await theDb.collection('Employees').deleteMany({});
-          await fullNestedInserts.insertEmployees(theDb);
+          await fullNestedInserts.insertEmployees(theDb, 20000);
         }
         //----------------//-----------------------//
       }
