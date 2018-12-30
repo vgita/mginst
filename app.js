@@ -9,7 +9,12 @@ const fullNestedDbName = 'VgitaDis2019FullNestedDb';
 
 let dbNames = [fullRefferenceDbName,refAndNestedDbName,fullNestedDbName ];
 
-(function() {
+let _names;
+let _addresses;
+let _departments;
+
+(async function() {
+    await initDataSources();
     dbNames.forEach(dbName => {
       createDb(dbName);
     });
@@ -31,7 +36,7 @@ function createDb (dbName) {
         if(theDb.databaseName === fullRefferenceDbName )
         {
           await theDb.collection('Departments').deleteMany({});
-          await fullRefereceInserts.insertDepartments(theDb);
+          await fullRefereceInserts.insertDepartments(theDb, _departments);
   
           await theDb.collection('Employees').deleteMany({});
           await fullRefereceInserts.insertEmployees(theDb, 20000);
@@ -71,5 +76,13 @@ function createDb (dbName) {
     console.log(e);
   }
 };
+
+
+
+let initDataSources = function() {
+    _names = await csvReader.getNames();
+    _addresses = await csvReader.getAddresses();
+    _departments = await csvReader.getDepartmentNames();
+}
 
 

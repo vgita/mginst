@@ -41,7 +41,8 @@ let getProjectIds = function(projectIds) {
     });
 }
 
-let getProjects = function(projects, numberOfRecords) {
+let getProjects = function(projects) {
+    let numberOfRecords = generateRandomProjectsNumber();
     let randomIndexes = generateRandomIndexes(projects.length, numberOfRecords);
 
     let randomProjects = randomIndexes.map(randomIndex => {
@@ -80,6 +81,14 @@ let generateProjects = function(numberOfRecords) {
     return records;
 }
 
+let getDepartment = function(departments) {
+    let departmentRandomIndex = Math.floor(Math.random() * departments.length);
+
+    return {
+        _id: departments[departmentRandomIndex]._id,
+        Name: departments[departmentRandomIndex].Name
+    };
+}
 //private
 
 let generateRandomIndexes = function(upperBound, numberOfRecords) {
@@ -110,5 +119,6 @@ module.exports = {
     getFullName,
     getAddress,
     getDepartmentId,
-    generateRandomProjectsNumber
+    generateRandomProjectsNumber,
+    getDepartment
 }

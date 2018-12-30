@@ -1,9 +1,11 @@
 const mongoDb = require('mongodb');
+const csvReader = require('./csvReader')
 
 const MongoClient = mongoDb.MongoClient;
 const dbUrl = 'mongodb://localhost:27017';
 
 let _db;
+
 
 let initDb = (callback, dbName) => {
     if(_db) {

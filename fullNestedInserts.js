@@ -24,19 +24,16 @@ let insertEmployees = async function (db, numberOfRecords) {
             let employeeFullName = recordsHelper.getFullName(names);
             let employeeAddress = recordsHelper.getAddress(addresses);
 
-            let departmentRandomIndex = Math.floor(Math.random() * departments.length);
-            let children = recordsHelper.getChildren(names, employeeFullName.split(' ')[1]);
-
-            var employee = {
+            let children = await recordsHelper.getChildren(names, employeeFullName.split(' ')[1]);
+            let theDept = recordsHelper.getDepartment(departments);
+            theDept.Projects =  await recordsHelper.getProjects(randomProjects);
+           
+            let employee = {
                 FullName: employeeFullName,
                 Address: employeeAddress,
-                Department: departments[departmentRandomIndex],
+                Department: theDept,
                 Children: children
             }
-
-          //  console.log(employee.Department);
-            let randomProjectNumber = recordsHelper.generateRandomProjectsNumber();
-            employee.Department.Projects = recordsHelper.getProjects(randomProjects, randomProjectNumber);
 
             employees.push(employee);
         }
