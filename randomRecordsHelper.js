@@ -34,7 +34,9 @@ let getDepartmentId = function(departmentIds) {
 // to an employee - refAndNestedInserts)
 let getProjectIds = function(projectIds) {
     let numberOfRecords = generateRandomProjectsNumber();
-    let randomIndexes = generateRandomIndexes(projectIds.length, numberOfRecords);
+
+    //use ...new Set to create a new array with unique values
+    let randomIndexes =[...new Set(generateRandomIndexes(projectIds.length, numberOfRecords))];
 
     return randomIndexes.map(randomIndex => {
         return projectIds[randomIndex];
@@ -89,6 +91,8 @@ let getDepartment = function(departments) {
         Name: departments[departmentRandomIndex].Name
     };
 }
+
+
 //private
 
 let generateRandomIndexes = function(upperBound, numberOfRecords) {

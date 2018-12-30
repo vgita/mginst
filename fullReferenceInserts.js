@@ -1,12 +1,10 @@
 const ObjectID = require('mongodb').ObjectID;
-const csvReader = require('./csvReader');
 const randomRecordsHelper = require('./randomRecordsHelper');
 
-let insertDepartments = async function (db) {
+let insertDepartments = async function (db, deptNames) {
     try {
         console.log("CALL: insertDepartments");
 
-        let deptNames = csvReader.getDepartmentNames();
         let deps = deptNames.map((name) => ({ Name: name }));
 
         await db.collection('Departments').insertMany(deps);
@@ -16,11 +14,9 @@ let insertDepartments = async function (db) {
     }
 }
   
-let insertEmployees = async function (db, numberOfRecords) {
+let insertEmployees = async function (db, numberOfRecords, names, addresses) {
     try {
         console.log("CALL: insertEmployees");
-        let names = await csvReader.getNames();
-        let addresses = await csvReader.getAddresses();
         let departmentIds = await db.collection('Departments').distinct('_id').then(function (result) {
             return result;
         });
@@ -42,11 +38,10 @@ let insertEmployees = async function (db, numberOfRecords) {
     }
 }
   
-let insertChildren = async function (db) {
+let insertChildren = async function (db, names) {
     try {
         console.log("CALL: insertChildren");
 
-        let names = await csvReader.getNames();
         let employees = await db.collection('Employees').find().toArray();
         let children = [];
        

@@ -1,14 +1,10 @@
-const csvReader = require('./csvReader');
 const ObjectID = require('mongodb').ObjectID;
 const recordsHelper = require('./randomRecordsHelper');
 
 
-let insertEmployees = async function (db, numberOfRecords) {
+let insertEmployees = async function (db, numberOfRecords, deptNames, names, addresses) {
     try {
         console.log('FULL NESTED===>insertEmployees');
-        let deptNames = await csvReader.getDepartmentNames();
-        let names = await csvReader.getNames();
-        let addresses = await csvReader.getAddresses();
 
         let randomProjects = recordsHelper.generateProjects(1000);
 

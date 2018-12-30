@@ -1,11 +1,9 @@
-const csvReader = require('./csvReader');
 const recordsHelper = require('./randomRecordsHelper');
 
-let insertDepartments = async function(db, maxNumberOfProjectsPerDepartment) {
+let insertDepartments = async function(db, maxNumberOfProjectsPerDepartment,deptNames) {
     try {
         console.log('===>insertDepartments');
 
-        let deptNames = await csvReader.getDepartmentNames();
         let departments = [];
 
         let randomGeneratedProjects = recordsHelper.generateProjects(maxNumberOfProjectsPerDepartment);
@@ -25,30 +23,38 @@ let insertDepartments = async function(db, maxNumberOfProjectsPerDepartment) {
     }
 }
 
-let insertEmployees = async function(db, numberOfRecords) {
+let insertEmployees = async function(db, numberOfRecords, names, addreses) {
     try {
         console.log('===>insertEmployees');
-        let departmentIds = await db.collection('Departments').distinct('_id').then(function (result) {
-            return result;
-        });
+        
+        let departments = await db.collection('Departments').find().toArray();
+       
 
-        let projectIds = await db.collection('Departments').distinct('Projects._id').then(function (result) {
-            return result;
+        let departmentIds = [];
+        departments.forEach(function(item) {
+            departmentIds.push(item._id);
         });
-
-        let names = await csvReader.getNames();
-        let addreses = await csvReader.getAddresses();
 
         let employees = [];
-        //Insert x employees
         for(let i=0; i < numberOfRecords; i++) {
 
             let fullName = recordsHelper.getFullName(names);
+            let departmentId = recordsHelper.getDepartmentId(departmentIds);
+            let projectIds = [];
+            await departments.forEach( async function(department) {
+                if(department._id == departmentId && department.Projects.length){
+                    let ids = await department.Projects.map(proj => {
+                        return proj._id;
+                    });
+                    console.log(ids);
+                    projectIds.push(...ids);
+                }
+            });
 
             let employee = {
                 FullName : fullName,
                 Address : recordsHelper.getAddress(addreses),
-                DepartmentId : recordsHelper.getDepartmentId(departmentIds),
+                DepartmentId : departmentId,
                 Projects : recordsHelper.getProjectIds(projectIds),
                 Children : recordsHelper.getChildren(names, fullName.split(' ')[1])
             }
