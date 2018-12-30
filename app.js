@@ -64,7 +64,7 @@ function createDb (dbName) {
         if(theDb.databaseName === fullNestedDbName)
         {
           await theDb.collection('Employees').deleteMany({});
-          await fullNestedInserts.insertEmployees(theDb, 20000, _departments, _names, _addresses);
+          await fullNestedInserts.insertEmployees(theDb, 20, _departments, _names, _addresses);
         }
         //----------------//-----------------------//
       }

@@ -6,12 +6,11 @@ let insertEmployees = async function (db, numberOfRecords, deptNames, names, add
     try {
         console.log('FULL NESTED===>insertEmployees');
 
-        let randomProjects = recordsHelper.generateProjects(1000);
-
         //look at ref and nested inserts example
         let departments = deptNames.map((departmentName) => ({
             _id: ObjectID(),
-            Name: departmentName
+            Name: departmentName,
+            Projects : recordsHelper.generateProjects(100, departmentName)
         }));
 
         let employees = [];
@@ -22,7 +21,21 @@ let insertEmployees = async function (db, numberOfRecords, deptNames, names, add
 
             let children = await recordsHelper.getChildren(names, employeeFullName.split(' ')[1]);
             let theDept = recordsHelper.getDepartment(departments);
-            theDept.Projects =  await recordsHelper.getProjects(randomProjects);
+
+            let currentDeptProjs = [];
+            await departments.forEach( async function(department) {
+                if(department._id == theDept._id && department.Projects.length){
+                    let projects = await department.Projects.map(proj => {
+                        return proj;
+                    });
+                    console.log(projects);
+                    currentDeptProjs.push(...projects);
+                }
+            }); 
+
+            console.log(currentDeptProjs);
+
+            theDept.Projects =  await recordsHelper.getProjects(currentDeptProjs);
            
             let employee = {
                 FullName: employeeFullName,

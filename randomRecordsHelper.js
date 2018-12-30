@@ -69,14 +69,14 @@ let getProjects = function(projects) {
 
 //todo: Get project name and description from external source
 //     and pass them as parameters
-let generateProjects = function(numberOfRecords) {
+let generateProjects = function(numberOfRecords, deptName = '') {
     let records = [];
     for(let i=0; i < numberOfRecords; i++)
     {
         records.push ({
             _id: ObjectID(),
-            Name: `Project ${i}`,
-            Description: `Description ${i}`,
+            Name: `${deptName} Project ${i}`,
+            Description: `${deptName} Description ${i}`,
             Duration: Math.floor(Math.random() * (10 - 4 + 1) + 4) 
         });
     }
