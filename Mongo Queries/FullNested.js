@@ -6,10 +6,10 @@
     ]).pretty()
 
 //Q2
-    db.Employees.find({$and:[{"Department.Name": "IT"}, {"Department.Projects.Name":"Project 354"}]}).pretty()
+    db.Employees.find({$and:[{"Department.Name": "IT"}, {"Department.Projects.Name":"IT Project 50"}]}).pretty()
 
     db.Employees.aggregate([
-        {$match: {$and: [{"Department.Name": "IT"}, {"Department.Projects.Name": "Project 354"}]}}
+        {$match: {$and: [{"Department.Name": "IT"}, {"Department.Projects.Name": "IT Project 50"}]}}
 ]).pretty()
 
 //Q3

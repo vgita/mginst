@@ -28,14 +28,12 @@ let insertEmployees = async function (db, numberOfRecords, deptNames, names, add
                     let projects = await department.Projects.map(proj => {
                         return proj;
                     });
-                    console.log(projects);
                     currentDeptProjs.push(...projects);
                 }
             }); 
 
-            console.log(currentDeptProjs);
-
-            theDept.Projects =  await recordsHelper.getProjects(currentDeptProjs);
+            let numberOfProjects = recordsHelper.generateRandomProjectsNumber();
+            theDept.Projects =  await recordsHelper.getProjects(currentDeptProjs,null, numberOfProjects);
            
             let employee = {
                 FullName: employeeFullName,

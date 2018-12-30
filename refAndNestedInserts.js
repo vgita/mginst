@@ -1,19 +1,19 @@
 const recordsHelper = require('./randomRecordsHelper');
 
-let insertDepartments = async function(db, maxNumberOfProjectsPerDepartment,deptNames) {
+let insertDepartments = async function(db,deptNames) {
     try {
         console.log('===>insertDepartments');
 
         let departments = [];
 
-        let randomGeneratedProjects = recordsHelper.generateProjects(maxNumberOfProjectsPerDepartment);
 
         for (let i = 0; i < deptNames.length; i++) {
+            let randomGeneratedProjects = recordsHelper.generateProjects(100);
             let department = { Name: deptNames[i]};
 
-            let randomProjectsNumber = Math.floor(Math.random() * maxNumberOfProjectsPerDepartment)
-           console.log(randomProjectsNumber);
-            department.Projects = recordsHelper.getProjects(randomGeneratedProjects, randomProjectsNumber);
+           // let randomProjectsNumber = Math.floor(Math.random() * 100)
+           //console.log(randomProjectsNumber);
+            department.Projects = recordsHelper.getProjects(randomGeneratedProjects, department.Name, 100);
             departments.push(department)
         }
         await db.collection('Departments').insertMany(departments);
@@ -46,7 +46,6 @@ let insertEmployees = async function(db, numberOfRecords, names, addreses) {
                     let ids = await department.Projects.map(proj => {
                         return proj._id;
                     });
-                    console.log(ids);
                     projectIds.push(...ids);
                 }
             });
