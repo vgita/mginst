@@ -11,7 +11,7 @@
 
 //Q2 Display all details about employees that work in a certain
 // department in a named project
-    db.Employees.aggregate(
+    db.Employees.explain("executionStats").aggregate(
         {$lookup: {
             from: 'Departments',
             localField: 'DepartmentId',
@@ -32,7 +32,7 @@
         }},
         {$match: {$and: [{"Department.Name": "IT"}, {"Projects.Name": " Project 3"}]}}
 
-        ).pretty()
+        )
 
 //Q3 Display all details about the projects where an employee is working
     db.Projects.aggregate(

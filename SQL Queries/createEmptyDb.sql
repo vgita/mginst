@@ -29,7 +29,9 @@ CREATE TABLE Departments(
 CREATE TABLE Employees(
 	Id int identity primary key,
 	FullName varchar(100),
-	Address varchar(200),
+	City varchar(50),
+	Street varchar(200),
+	Zip varchar(20),
 	DepartmentId int FOREIGN KEY (DepartmentId) REFERENCES Departments(Id) on DELETE NO ACTION ON UPDATE CASCADE
 );
 
