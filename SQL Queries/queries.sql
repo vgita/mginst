@@ -5,7 +5,7 @@
 SET STATISTICS IO, TIME ON;
 GO
 
-SELECT e.Id, e.FullName, e.Address
+SELECT e.Id, e.FullName, e.City, e.Street, e.Zip
 FROM Employees e INNER JOIN Departments d on e.DepartmentId = d.Id
 WHERE d.Name = 'Executive'
 
@@ -16,7 +16,7 @@ GO
 SET STATISTICS IO, TIME ON;
 GO
 
-SELECT e.Id, e.FullName, e.Address, p.Name
+SELECT e.Id, e.FullName, e.City, e.Street, e.Zip, p.Name
 FROM Employees e INNER JOIN
 	 Departments d on e.DepartmentId = d.Id INNER JOIN
 	 WorksOn wo on e.Id = wo.EmployeeId INNER JOIN
@@ -54,10 +54,10 @@ GO
 SET STATISTICS IO, TIME ON;
 GO
 
-SELECT e.Id, e.FullName, e.Address
+SELECT e.Id, e.FullName, e.City, e.Street, e.Zip
 FROM Employees e INNER JOIN Children c on e.Id = c.EmployeeId
-GROUP BY e.Id,  e.FullName, e.Address
-HAVING Count(*) = 1
+GROUP BY e.Id,  e.FullName, e.City, e.Street, e.Zip
+HAVING Count(*) = 2
 
 SET STATISTICS IO, TIME OFF;
 GO

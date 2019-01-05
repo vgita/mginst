@@ -36,35 +36,35 @@ function createDb (dbName) {
         //--------===> FULL REFERENCES DB
         if(theDb.databaseName === fullRefferenceDbName )
         {
-          await theDb.collection('Departments').deleteMany({});
-          await fullRefereceInserts.insertDepartments(theDb, _departments);
+          // await theDb.collection('Departments').deleteMany({});
+          // await fullRefereceInserts.insertDepartments(theDb, _departments);
   
-          await theDb.collection('Employees').deleteMany({});
-          await fullRefereceInserts.insertEmployees(theDb, 50, _names, _addresses);
+          // await theDb.collection('Employees').deleteMany({});
+          // await fullRefereceInserts.insertEmployees(theDb, 2000000, _names, _addresses);
   
-          await theDb.collection('Children').deleteMany({});
-          await fullRefereceInserts.insertChildren(theDb, _names);
+          // await theDb.collection('Children').deleteMany({});
+          // await fullRefereceInserts.insertChildren(theDb, _names);
   
-          await theDb.collection('Projects').deleteMany({});
-          await fullRefereceInserts.insertProjects(theDb, 20);
+          // await theDb.collection('Projects').deleteMany({});
+          // await fullRefereceInserts.insertProjects(theDb, 400000);
   
-          await theDb.collection('WorksOn').deleteMany({});
-          await fullRefereceInserts.insertWorksOn(theDb);
+          // await theDb.collection('WorksOn').deleteMany({});
+          // await fullRefereceInserts.insertWorksOn(theDb);
         }
         
         if(theDb.databaseName === refAndNestedDbName)
         {
-          await theDb.collection('Departments').deleteMany({});
-          await refAndNesteInserts.insertDepartments(theDb, _departments);
+          // await theDb.collection('Departments').deleteMany({});
+          // await refAndNesteInserts.insertDepartments(theDb, _departments);
 
-          await theDb.collection('Employees').deleteMany({});
-          await refAndNesteInserts.insertEmployees(theDb, 10, _names, _addresses);
+          // await theDb.collection('Employees').deleteMany({});
+          // await refAndNesteInserts.insertEmployees(theDb, 2000000, _names, _addresses);
         }
 
         if(theDb.databaseName === fullNestedDbName)
         {
           await theDb.collection('Employees').deleteMany({});
-          await fullNestedInserts.insertEmployees(theDb, 20, _departments, _names, _addresses);
+          await fullNestedInserts.insertEmployees(theDb, 2000000, _departments, _names, _addresses);
         }
         //----------------//-----------------------//
       }

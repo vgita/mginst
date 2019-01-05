@@ -43,7 +43,7 @@ let getProjectIds = function(projectIds) {
     });
 }
 
-let getProjects = function(projects, deptName='', numberOfRecords) {
+let getProjects = function(projects, numberOfRecords) {
    // let numberOfRecords = generateRandomProjectsNumber();
     let randomIndexes = generateRandomIndexes(projects.length, numberOfRecords);
 
@@ -58,8 +58,8 @@ let getProjects = function(projects, deptName='', numberOfRecords) {
         if(!map.has(project._id)){
             map.set(project._id, true);
             uniqueProjects.push({_id: project._id, 
-                Name:`${deptName} ${project.Name}`, 
-                Description: `${deptName} ${project.Description}`, 
+                Name:`${project.Name}`, 
+                Description: `${project.Description}`, 
                 Duration: project.Duration});
         }
     }

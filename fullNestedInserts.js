@@ -7,15 +7,20 @@ let insertEmployees = async function (db, numberOfRecords, deptNames, names, add
         console.log('FULL NESTED===>insertEmployees');
 
         //look at ref and nested inserts example
-        let departments = deptNames.map((departmentName) => ({
+        let departments = await deptNames.map((departmentName) => ({
             _id: ObjectID(),
-            Name: departmentName,
-            Projects : recordsHelper.generateProjects(100, departmentName)
+            Name: departmentName
+            //Projects : recordsHelper.generateProjects(50000, departmentName)
         }));
+
+        await departments.forEach((department) => {
+            department.Projects = recordsHelper.generateProjects(50000, department.Name );
+        })
 
         let employees = [];
 
         for (let i = 0; i < numberOfRecords; i++) {
+
             let employeeFullName = recordsHelper.getFullName(names);
             let employeeAddress = recordsHelper.getAddress(addresses);
 
@@ -24,7 +29,8 @@ let insertEmployees = async function (db, numberOfRecords, deptNames, names, add
 
             let currentDeptProjs = [];
             await departments.forEach( async function(department) {
-                if(department._id == theDept._id && department.Projects.length){
+               
+                if(department._id.toString() == theDept._id.toString() && department.Projects.length){
                     let projects = await department.Projects.map(proj => {
                         return proj;
                     });
@@ -33,7 +39,7 @@ let insertEmployees = async function (db, numberOfRecords, deptNames, names, add
             }); 
 
             let numberOfProjects = recordsHelper.generateRandomProjectsNumber();
-            theDept.Projects =  await recordsHelper.getProjects(currentDeptProjs,null, numberOfProjects);
+            theDept.Projects =  await recordsHelper.getProjects(currentDeptProjs,numberOfProjects);
            
             let employee = {
                 FullName: employeeFullName,
@@ -43,9 +49,22 @@ let insertEmployees = async function (db, numberOfRecords, deptNames, names, add
             }
 
             employees.push(employee);
+
+        //    console.log(employees.length);
+
+            if((i+1) % 100000 == 0) {
+                await db.collection('Employees').insertMany(employees);
+                console.log(`FULL NESTED===> inserted: ${i}`);
+
+                employees = [];
+            }
+            if((i+1) % 10000 == 0){
+                console.log('Wait...');
+            }
+
         }
 
-        await db.collection('Employees').insertMany(employees);
+     //   await db.collection('Employees').insertMany(employees);
     } catch (e) {
         console.log('ERROR: ' + e);
     }

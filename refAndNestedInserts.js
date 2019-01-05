@@ -4,19 +4,20 @@ let insertDepartments = async function(db,deptNames) {
     try {
         console.log('===>insertDepartments');
 
-        let departments = [];
-
+     //   let departments = [];
 
         for (let i = 0; i < deptNames.length; i++) {
-            let randomGeneratedProjects = recordsHelper.generateProjects(100);
             let department = { Name: deptNames[i]};
 
-           // let randomProjectsNumber = Math.floor(Math.random() * 100)
-           //console.log(randomProjectsNumber);
-            department.Projects = recordsHelper.getProjects(randomGeneratedProjects, department.Name, 100);
-            departments.push(department)
+            let randomGeneratedProjects = recordsHelper.generateProjects(400000, department.Name);
+
+            department.Projects = recordsHelper.getProjects(randomGeneratedProjects,55000);
+           // departments.push(department);
+
+            await db.collection('Departments').insertOne(department);
+            console.log(`created ${department.Name} collection`);
         }
-        await db.collection('Departments').insertMany(departments);
+        //await db.collection('Departments').insertMany(departments);
     
     } catch(e) {
         console.log('ERROR: '+e);
@@ -59,8 +60,19 @@ let insertEmployees = async function(db, numberOfRecords, names, addreses) {
             }
 
             employees.push(employee);
+
+            if((i+1) % 100000 == 0) {
+                await db.collection('Employees').insertMany(employees);
+                console.log(`REF AND NESTED ---==> inserted: ${i}`);
+
+                employees = [];
+            }
+
+            if((i+1) % 10000 == 0){
+                console.log('Wait...');
+            }
         }
-        await db.collection('Employees').insertMany(employees);
+      //  await db.collection('Employees').insertMany(employees);
         console.log("Done inserting employees ref and nested documents");
 
     } catch(e) {

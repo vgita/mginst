@@ -164,11 +164,13 @@ BEGIN
 	-- 8-0 persons can work at a project
 	SET @RandomWorkingPersonsCount = ROUND(((7 - 1) * RAND()), 0)
 
+	DECLARE @ProjDeptId int
+		SET @ProjDeptId = (SELECT p.DepartmentId from Projects p where p.Id = @ProjectId);
+
 	WHILE(@RandomWorkingPersonsCount > 0)
 	BEGIN
-	
 		DECLARE @EmployeeId int
-		SET @EmployeeId =  (SELECT TOP 1 e.Id FROM Employees e inner join Projects p on e.DepartmentId = p.DepartmentId  order by NEWID())
+		SET @EmployeeId =  (SELECT TOP(1) e.Id FROM Employees e TABLESAMPLE (1 PERCENT) REPEATABLE (100) inner join Departments d on e.DepartmentId = d.Id where d.Id = @ProjDeptId  order by NEWID())
 
 		DECLARE @RandomWorkingHours int
 		SET @RandomWorkingHours =  ROUND(((8 - 1) * RAND() + 1), 0);

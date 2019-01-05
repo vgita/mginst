@@ -6,7 +6,7 @@ let _addresses = [];
 let getNames = function() {
     if(!_names.length) {
         _names = csv()
-            .fromFile('D:\Dis\names.csv')
+            .fromFile("..\\names.csv")
             .then((jsonObj) => {
                 return jsonObj.map(data => {
                     return data.name;
@@ -19,10 +19,10 @@ let getNames = function() {
 let getAddresses = async function () {
     if (!_addresses.length) {
         _addresses = csv()
-            .fromFile('D:\Dis\addresses.csv')
+            .fromFile('..\\addresses.csv')
             .then((jsonObj) => {
                 return jsonObj.map(data => {
-                    return 'City: ' + data.city + ', Street: ' + data.street + ', Zip: ' + data.zip;
+                    return {City:  data.city , Street: data.street , Zip: data.zip};
                 });
             });
     }
