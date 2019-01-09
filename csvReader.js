@@ -2,6 +2,7 @@ const csv = require('csvtojson');
 
 let _names = [];
 let _addresses = [];
+let _departments = [];
 
 let getNames = function() {
     if(!_names.length) {
@@ -30,7 +31,13 @@ let getAddresses = async function () {
 };
 
 let getDepartmentNames = function() {
-    return ['Executive','Marketing','Finance','Management','IT','Sales','Production','Human Resources'];
+    if (!_departments.length) {
+        for (let i = 0; i < 100; i++) {
+            _departments.push(`Department ${i + 1}`)
+        }
+    }
+
+    return _departments;
 }
 
 module.exports = {

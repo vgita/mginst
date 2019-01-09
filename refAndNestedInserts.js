@@ -11,7 +11,7 @@ let insertDepartments = async function(db,deptNames) {
 
             let randomGeneratedProjects = recordsHelper.generateProjects(400000, department.Name);
 
-            department.Projects = recordsHelper.getProjects(randomGeneratedProjects,55000);
+            department.Projects = recordsHelper.getProjects(randomGeneratedProjects,2000);
            // departments.push(department);
 
             await db.collection('Departments').insertOne(department);

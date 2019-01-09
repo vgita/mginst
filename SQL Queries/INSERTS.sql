@@ -29,17 +29,24 @@ DELETE FROM Departments
 
 --Departments table
 
-DECLARE @DepNames varchar(500)
-SET @DepNames = 'Executive,Marketing,Finance,Management,IT,Sales,Production,Human Resources'
+--DECLARE @DepNames varchar(500)
+--SET @DepNames = 'Executive,Marketing,Finance,Management,IT,Sales,Production,Human Resources'
 
-WHILE len(@DepNames) > 0
+--WHILE len(@DepNames) > 0
+--BEGIN
+--	INSERT INTO Departments(Name) VALUES (left(@DepNames, charindex(',', @DepNames+',')-1))
+--	--print left(@DepNames, charindex(',', @DepNames+',')-1)
+--	SET @DepNames = stuff(@DepNames, 1, charindex(',', @DepNames+','), '')
+--END
+
+DECLARE @Cursor int
+SET @Cursor = 1;
+WHILE (@Cursor <= 100)
 BEGIN
-	INSERT INTO Departments(Name) VALUES (left(@DepNames, charindex(',', @DepNames+',')-1))
+	INSERT INTO Departments(Name) VALUES ('Department '+ CONVERT(varchar(10), @Cursor))
 	--print left(@DepNames, charindex(',', @DepNames+',')-1)
-	SET @DepNames = stuff(@DepNames, 1, charindex(',', @DepNames+','), '')
+	SET @Cursor = @Cursor + 1;
 END
-
-
 
 --Employees table
 

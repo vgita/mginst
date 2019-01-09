@@ -14,7 +14,7 @@ let insertEmployees = async function (db, numberOfRecords, deptNames, names, add
         }));
 
         await departments.forEach((department) => {
-            department.Projects = recordsHelper.generateProjects(50000, department.Name );
+            department.Projects = recordsHelper.generateProjects(2000, department.Name );
         })
 
         let employees = [];
